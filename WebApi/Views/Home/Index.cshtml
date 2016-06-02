@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ASP.NET Web API</title>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+</head>
+<body id="body">
+    <div class="main-content">
+        <div>
+            <h1>All Products</h1>
+            <ul id="products" />
+        </div>
+        <div>
+            <label for="prodId">ID:</label>
+            <input type="text" id="prodId" size="5" />
+            <input type="button" value="Search" onclick="find();" />
+            <p id="product" />
+        </div>
+    </div>
+    <script type="text/javascript">
+        // TODO Add script
+        $(document).ready(function () {
+            $.getJSON("api/product/", function (data) {
+                $.each(data, function (key, val) {
+                    var str = val.Name + ': $' + val.price;
+                    $('<li/>', { text: str }).appendTo($('#product'));
+                });
+            });
+        });
+        function find() {
+            var id = $('#prodId').val();
+            $.getJSON("api/product/" + id,
+                function (data) {
+                    var str = data.Name + ': $' + data.price;
+                    $('#product').text(str);
+                })
+            .fail(
+                function (jqXHR, textStatus, err) {
+                    $('#product').text('Error: ' + err);
+                });
+        }
+    </script>
+</body>
+</html>
